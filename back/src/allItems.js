@@ -13,7 +13,7 @@ const getAllItens = async () => {
 // Inserindo dados no Banco de dados
 async function insertItem(title, author) {
   try {
-    const insertQuery = "INSERT INTO book (title, author) VALUES (?, ?)";
+    const insertQuery = "INSERT INTO book (title, author) VALUES (?, ?);";
     const values = [title, author];
     const [result] = await connection.execute(insertQuery, values);
     return result;
@@ -22,4 +22,28 @@ async function insertItem(title, author) {
   }
 }
 
-module.exports = { getAllItens, insertItem };
+// Update
+const updateItem = async (id, title, author) => {
+  try {
+    const updateQuery = "update book set title = ?, author = ? where id = ?;";
+    const values = [title, author, id];
+    const [result] = await connection.execute(updateQuery, values);
+    return result;
+  } catch (error) {
+    throw new error(`Erro ao atualizar o item: ${error.message}`);
+  }
+};
+
+//Delete
+const deleteItem = async (id) => {
+  try {
+    const deleteQuery = "DELETE FROM book WHERE id = ?;";
+    const values = [id];
+    const [result] = await connection.execute(deleteQuery, values);
+    return result;
+  } catch (error) {
+    throw new error(`Erro ao excluir o item: ${error.message}`);
+  }
+};
+
+module.exports = { getAllItens, insertItem, updateItem, deleteItem };
